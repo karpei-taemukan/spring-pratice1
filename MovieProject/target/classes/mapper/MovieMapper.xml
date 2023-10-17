@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.MovieProject.Dao.MovieDao">
+  
+ <select id="selectMovieMvopen_mapper" resultType="com.MovieProject.Dto.Movie">
+select * from (select mv.*, nvl(re.recount,0) as recount 
+from movies mv 
+left outer join (
+select mvcode, count(mvcode) as recount 
+from reserves
+group by mvcode
+) re
+on mv.mvcode = re.mvcode
+where mv.mvcode in (select mvcode from schedules where scdate > sysdate)
+order by recount desc) where rownum between 1 and 6
+</select>
+
+<select id="selectDetailMovie" resultType="mov">
+select * from movies where mvcode=#{mvcode}
+</select>
+
+<select id="selectCurrentMovie_Mapper" resultType="com.MovieProject.Dto.Movie">
+select mvcode,mvposter,mvtitle,mvdirector,mvactors,mvinfo,mvgenre,to_char(mvopendate,'yyyy-mm-dd') as mvopendate from movies 
+where mvcode in (select mvcode from schedules where scdate > sysdate group by mvcode)
+order by mvopendate desc
+</select>
+
+<select id="selectMovieList_json_Mapper" resultType="com.MovieProject.Dto.Movie">
+select * from movies
+where mvcode in (select mvcode from schedules where scdate > sysdate
+<if test="selThcode != 'ALL'">
+and thcode = #{selThcode}
+</if>
+ group by mvcode)
+order by mvopendate desc
+</select>
+
+<select id="selectMaxRecode" resultType="String">
+select nvl(max(recode),'re00000') from reserves
+</select>
+
+<insert id="insertReserve">
+insert into reserves(recode, mid, mvcode, thcode, schall, scdate, redate) values(#{recode},#{mid},#{mvcode},#{thcode},#{schall},to_date(#{scdate}, 'yyyy-mm-dd hh24:mi'),sysdate)</insert>
+ 
+<select id="selectReviewList" resultType="hashmap"> 
+select * from reviews rv
+inner join members mem on mem.mid = rv.mid
+where recode in (select recode from reserves where mvcode = #{mvcode})
+</select> 
+ 
+</mapper>

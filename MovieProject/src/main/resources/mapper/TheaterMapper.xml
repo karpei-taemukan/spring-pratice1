@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+  <mapper namespace="com.MovieProject.Dao.TheaterDao">
+  <select id="selectTheaterList" resultType="com.MovieProject.Dto.Theater">
+select * from theaters where thcode in (
+select thcode from schedules where scdate > sysdate
+<if test="selMvcode != 'ALL'">
+and mvcode=#{selMvcode}
+</if>
+ group by thcode
+) order by thcode
+  </select>
+  </mapper>
+  

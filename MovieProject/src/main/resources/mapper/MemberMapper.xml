@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+    <mapper namespace="com.MovieProject.Dao.MemberDao">
+    <select id="selectLoginMember_kakao" resultType="com.MovieProject.Dto.Member">
+    select * from members where mid = #{id}
+    </select>
+    <insert id="insetMember_kakao">
+    insert into members(mid, mpw, mname, memail, mdate, mprofile, mstate) values(#{mid},'kakaoAcount',#{mname}, #{memail}, sysdate, #{mprofile}, 'Y') 
+    </insert>
+  
+  	<insert id="insertJoinMember">
+  	insert into members(mid, mpw, mname, memail, mdate, mprofile, mstate) values(#{mid},#{mpw},#{mname},#{memail},sysdate,#{mprofile},#{mstate})
+  	</insert>
+  	
+  	<select id="selectMemberLoginInfo" resultType="com.MovieProject.Dto.Member">
+  	select * from members where mid = #{userId} and mpw = #{userPw}
+  	</select>
+  	
+  	<select id="selectId" resultType="String">
+  	select mid from members where mid = #{inputId}
+  	</select>
+    
+  	<select id="selectReserveList" resultType="hashMap">
+ 		select mv.mvcode, mv.mvtitle, mv.mvposter, th.thname, re.recode, re.schall, to_char(re.scdate,'yyyy-mm-dd hh24:mi') as scdate, re.redate
+		from reserves re
+				inner join movies mv
+				on re.mvcode = mv.mvcode
+				inner join theaters th
+				on re.thcode = th.thcode
+		where re.mid = #{loginId}
+		order by re.scdate desc
+  	</select>
+  	
+  	<delete id="deleteReserve">
+  			delete from reserves where recode = #{recode} and mid = #{loginId}
+  	</delete>
+  	
+  	  	<delete id="deleteKakao_pay">
+  			delete from reserves where recode = #{recode} and mid = #{loginMemberId} and thcode = #{thcode} and mvcode = #{mvcode} and schall=#{schall} and scdate = sysdate
+  	</delete>
+  	
+  	
+  	<select id="selectReviewCode" resultType="String">
+  	select rvcode from reviews where recode = #{recode}
+  	</select>
+  	
+  	
+  	<select id="selectMaxRecode" resultType="String">  	
+  	select nvl(max(rvcode), 'rv00000') from reviews
+  	</select>
+  	
+  	<insert id="insertReview">
+  	insert into reviews(rvcode,recode,mid,rvcomment,rvdate) values(#{rvcode},#{recode},#{loginId},#{rvcomment},sysdate)
+  	</insert>
+  	
+  	<delete id="deleteComment">
+  	delete from reviews where rvcode = #{rvcode}
+  	</delete>
+    </mapper>
+  

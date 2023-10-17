@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+ 
+ <typeAliases>
+ <typeAlias type="com.MovieProject.Dto.Movie" alias="mov" />  <!-- type은 Dto 경로 // alias는 별칭 -->
+ </typeAliases>
+ 
+   <mappers>
+    <mapper resource="mapper/AdminMapper.xml"/>
+    <mapper resource="mapper/MovieMapper.xml"/>
+    <mapper resource="mapper/MemberMapper.xml"/>
+    <mapper resource="mapper/TheaterMapper.xml"/>
+     <mapper resource="mapper/SeatMapper.xml"/>
+      <mapper resource="mapper/ScheduleMapper.xml"/>
+      </mappers>
+</configuration>
+
+

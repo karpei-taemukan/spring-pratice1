@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.MovieProject.Dao.ScheduleDao">
+  <select id="selectDateList" resultType="com.MovieProject.Dto.Schedule">
+  select to_char(scdate,'yyyy-mm-dd') as scdate from schedules where scdate > sysdate and mvcode = #{mvcode} and thcode=#{thcode} group by to_char(scdate, 'yyyy-mm-dd') order by scdate
+  </select>
+  <select id="selctTimeList" resultType="com.MovieProject.Dto.Schedule">
+  select to_char(scdate,'hh24:mi') as scdate, schall from schedules 
+  where scdate > sysdate and mvcode = #{mvScode} and thcode = #{thScode} and to_char(scdate,'yyyy-mm-dd') = #{scSdate} order by schall, scdate
+  </select>
+  </mapper>

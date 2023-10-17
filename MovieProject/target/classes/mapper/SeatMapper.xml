@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="com.MovieProject.Dao.SeatDao">
+  <insert id="insertSeatInfo">
+  insert into seats(mid,mvcode,thname, schall, sctime, sid, stype, sdate) 
+  values(#{loginId,jdbcType=VARCHAR}, #{mvcode,jdbcType=VARCHAR},#{thname,jdbcType=VARCHAR} ,#{schall,jdbcType=VARCHAR}, #{sctime,jdbcType=VARCHAR}, #{seatId,jdbcType=VARCHAR}, #{seatType,jdbcType=VARCHAR}, sysdate)
+  </insert>
+  </mapper>
